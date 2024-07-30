@@ -1,5 +1,6 @@
 import java.sql.*;
 import java.util.Scanner;
+import java.util.regex.*;
 
 public class Main {
 
@@ -14,11 +15,9 @@ public class Main {
     private static Connection connection = null;
     private static ResultSet rs;
 
-    // String regex
-    static String emailRegex = " ^[a-zA-Z0-9_+&*-]+(?:\\\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\\\.)+[a-zA-Z]{2,7}$";
-
     public static void main(String[] args) {
 
+        // Loop condition
         boolean choice = true;
 
         try {
@@ -34,10 +33,14 @@ public class Main {
                 System.out.print("Password: ");
                 String pass = scan.nextLine();
 
-                // Check if empty
-                if (email_address.isEmpty() || pass.isEmpty()) {
+                // Regular expression, check if the email format is valid
+                var emailPattern = "^[a-zA-Z][a-zA-Z0-9._%+-]*@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,7}$";
+                if (!email_address.matches(emailPattern)) {
+                    System.out.println("Invalid email format");
+                    continue;
+                } else if (email_address.isEmpty() || email_address.isBlank() || pass.isEmpty() || pass.isBlank()) {
                     System.out.println("Cannot leave the field empty. Please try again.");
-                    continue; // Skip the rest of the loop and prompt again
+                    continue;
                 }
 
                 // 2. SQL query
@@ -51,7 +54,7 @@ public class Main {
                 preparedStatement.setString(2, pass);
 
                 // 5. Execute the query
-                int rowsAffected = preparedStatement.executeUpdate();
+                var rowsAffected = preparedStatement.executeUpdate();
                 System.out.println("Data inserted successfully. Rows affected: " + rowsAffected);
 
                 // Exit loop after successful insertion
@@ -60,6 +63,14 @@ public class Main {
         } catch (SQLException e) {
             System.err.println("Got an exception! ");
             System.err.println(e.getMessage());
+        } finally {
+            // Close resources in finally block
+            try {
+                if (preparedStatement != null) preparedStatement.close();
+                if (connection != null) connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
     }
 }

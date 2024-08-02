@@ -18,7 +18,7 @@ public class Main {
     public static void main(String[] args) {
 
         // Loop condition
-        boolean choice = true;
+        var choice = true;
 
         try {
             // 1. Establish SQL connection once before entering the loop
@@ -34,6 +34,7 @@ public class Main {
                 String pass = scan.nextLine();
 
                 // Regular expression, check if the email format is valid
+                // example "enzodaniela@gmail.com"
                 var emailPattern = "^[a-zA-Z][a-zA-Z0-9._%+-]*@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,7}$";
                 if (!email_address.matches(emailPattern)) {
                     System.out.println("Invalid email format");

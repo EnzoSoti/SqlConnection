@@ -46,18 +46,14 @@ public class Main {
 
                 // 2. SQL query
                 String query = "INSERT INTO login (email, password) VALUES (?, ?)";
-
                 // 3. Prepare statement
                 preparedStatement = connection.prepareStatement(query);
-
                 // 4. Set the value for the placeholders
                 preparedStatement.setString(1, email_address);
                 preparedStatement.setString(2, pass);
-
                 // 5. Execute the query
                 var rowsAffected = preparedStatement.executeUpdate();
                 System.out.println("Data inserted successfully. Rows affected: " + rowsAffected);
-
                 // Exit loop after successful insertion
                 choice = false;
             }
